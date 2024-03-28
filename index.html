@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROJECT</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Minimalistic Punching Game</h1>
+    <h2>by the GROUP DDGHT</h2>
+    <div class="container">
+        <div class="left-panel">
+            <select id="coinChoice">
+                <option value="head">Head</option>
+                <option value="tail">Tail</option>
+            </select>
+            <button id = "play" onclick="tossCoin()">Let's Play!</button>
+            <button id="attackButton" onclick="playerAttack()" disabled>Attack</button>
+            <button id="defendButton" onclick="playerDefend()" disabled>Defend</button>
+            <button id="resetButton" onclick="reset()" disabled>Reset</button>
+        </div>
+        <div class="text-panel">
+            <div class="colored-rectangle">
+                <p id="pHealth"></p>
+                <p id="oHealth"></p>
+            </div>
+            <b><p id="pAction"></p></b>
+            <p id="oAction"></p>
+            <p id="result"></p>
+            <p id="victoryMessage"></p>
+        </div>
+    </div>
+
+    <!--BRIEF OVERVIEW OF ALL IMPORTANT FUNCTIONS:  function tossCoin(playerChoice), reset(), calculateDamage(), 
+        opponentAction(), opponentMove(), playerAttack(), playerDefend(), opponentAttack(), opponentDefend(), GameStatus() making the total number of functions to 10!-->
+    <script>
+
+        var p1health = 100;
+        var o1health = 100;
+        var playerAction;
+        var start = 0;
+        var compgen =  Math.floor(Math.random()*2);
+        var trueDefend = Math.floor(Math.random());
+
+        function tossCoin(playerChoice) /* for the heads and tails */ {
+            var playerChoice = document.getElementById('coinChoice').value;
+            if(compgen===1) /* converts the numerical value in compgen to a string */
+            {
+                compgen="head";
+            }
+            else
+            {
+                compgen="tail";
+            }
+            if(playerChoice===compgen) /* decides whether the player can attack first or no */
+                {
+                    alert( "Coin is " + compgen + ". You chose " + playerChoice);
+                    document.getElementById('coinChoice').disabled = true;
+                    document.getElementById('play').disabled = true;
+                    start = 1;
+                }
+                else 
+                {
+                    alert( "Coin is " + compgen + ". You chose " + playerChoice);
+                    document.getElementById('coinChoice').disabled = true;
+                    document.getElementById('play').disabled = true;
+                    start = 2;
+                }
+                document.getElementById('resetButton').disabled = false;
+            if (start == 0) {
+                    document.getElementById('attackButton').disabled = true;
+                    document.getElementById('defendButton').disabled = true;
+                } else if (start == 1) {
+                    document.getElementById('attackButton').disabled = false;
+                    document.getElementById('defendButton').disabled = true;
+                } else {
+                    document.getElementById('attackButton').disabled = false;
+                    document.getElementById('defendButton').disabled = false;
+                }
+            }
+
+        function reset () /* for the reset button */ {
+            p1health = 100;
+            o1health = 100;
+            playerAction = undefined;
+            start = 0;
+            tossedCoin = false;
+            document.getElementById('attackButton').disabled = true;
+            document.getElementById('defendButton').disabled = true;
+            document.getElementById('resetButton').disabled = true;
+            document.getElementById('pHealth').innerText = " ";
+            document.getElementById('oHealth').innerText = " ";
+            document.getElementById('pAction').innerText = " ";
+            document.getElementById('oAction').innerText = " ";
+            document.getElementById('result').innerText = " ";
+            document.getElementById('victoryMessage').innerText = " ";
+            document.getElementById('coinChoice').disabled = false;
+            document.getElementById('play').disabled = false;
+
+        }
+
+        function calculateDamage() /*calculates damage for the player and opponent*/  {
+            return Math.floor(Math.random() * 5) + 1; 
+        }
+
+        function opponentAction() /* makes the decision of what the opponent should do */  {
+        if (Math.random()<0.5){
+            return 0; 
+        }
+        else
+        {
+            return 1; 
+        }
+
+        }
+
+        function opponentMove() /* the actual implementation of opponentAction */ {
+        var x = opponentAction();
+            if (x===0) {
+              opponentDefend();
+              document.getElementById('pHealth').innerText = "Player health: " + p1health;
+            document.getElementById('oHealth').innerText = "Opponent health: " + o1health;
+            } else if (x===1)
+            {
+               opponentAttack();
+               document.getElementById('pHealth').innerText = "Player health: " + p1health;
+                document.getElementById('oHealth').innerText = "Opponent health: " + o1health;
+            }
+        }
+
+        function playerAttack() /* for the button attack */ {
+        document.getElementById("pAction").innerText = "You will attack";
+        playerAction = 1;
+        opponentMove();
+        }
+
+        function playerDefend() /* for the button defend */ {
+        document.getElementById("pAction").innerText = "You will defend";
+        playerAction = 0;
+        opponentMove();
+        }
+
+        
+        function opponentAttack() /* what the opponent should do when it attacks and the player's numerous defensive responses */ {
+           var opponentdamage= calculateDamage();
+           var playerdamage= calculateDamage();
+            var playerDefend = Math.floor((Math.random()*3)+1);
+            if (playerAction === 1 ) {
+                p1health-=opponentdamage;
+                o1health-=playerdamage;
+                document.getElementById("oAction").innerText = "The opponent attacked too."
+                document.getElementById("result").innerText = "You inflict " + playerdamage  + " damage and opponent inflicts " + opponentdamage + " damage!";
+            } 
+            else
+            {
+            if (trueDefend == 0) {
+                if (opponentdamage > playerDefend) {
+                    var damageTaken = opponentdamage - playerDefend;
+                    document.getElementById("result").innerText = "You blocked part of the opponent's attack and took " + damageTaken + " damage!";
+                    p1health -= damageTaken;
+                } 
+                else {
+                document.getElementById("result").innerText = "You blocked the opponent's attack!";
+            }
+            } 
+            else
+            {
+            document.getElementById("result").innerText = "You defended perfectly!";
+            }
+            }
+
+            document.getElementById("defendButton").disabled = false;
+            GameStatus();
+    }
+
+        function opponentDefend() /* what the opponent should do when it defends in case of an attack by the player and how will it do so in differing degrees*/{
+        var playerdamage = calculateDamage();
+        var opponentdamage = calculateDamage();
+        var opponentDefend = Math.floor((Math.random() * 3) + 1);
+        if (playerAction === 1) {
+                document.getElementById("oAction").innerText = "The opponent defended."
+                document.getElementById("result").innerText = "You inflict " + playerdamage  + " damage and opponent inflicts " + opponentdamage + " damage!";
+            if (trueDefend == 0) {
+                if (playerdamage > opponentDefend) {
+                    var damageTaken = playerdamage - opponentDefend;
+                    document.getElementById("result").innerText = "The opponent blocked part of your attack and took " + damageTaken + " damage!";
+                    o1health -= damageTaken;
+                } 
+                else 
+                {
+                document.getElementById("result").innerText = "The opponent blocked your attack!";
+                }
+            } 
+            else 
+            {
+            document.getElementById("result").innerText = "The opponent defended perfectly!";
+            }
+            } 
+            else 
+            {
+                document.getElementById("oAction").innerText = "The opponent defended too."
+                document.getElementById("result").innerText = "You both defended!";
+            }
+
+            document.getElementById("defendButton").disabled = false;
+            GameStatus();
+    }
+    
+    function GameStatus() /* it detect when the player health or opponent health reach 0 */ {
+        
+        if (p1health <= 0) {
+            start = 0;
+            document.getElementById('attackButton').disabled = true;
+            document.getElementById('defendButton').disabled = true;
+            document.getElementById('victoryMessage').innerText = "Opponent wins";
+        } else if (o1health <= 0) {
+            start = 0;
+            document.getElementById('attackButton').disabled = true;
+            document.getElementById('defendButton').disabled = true;
+            document.getElementById('victoryMessage').innerText = "Player wins";
+        }
+    }
+    </script>
+</body>
+</html

@@ -1,0 +1,112 @@
+h1, h2{
+    position: absolute;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    text-align: center;  
+}
+h1 {
+    top:2vh;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+h2 {
+    top:10vh;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;   
+}
+
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.container {
+    display: flex;
+    width: 3000px;
+    align-items: flex-start;
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.left-panel {
+    margin-right: 20px;
+}
+
+.text-panel {
+    margin-left: 20px;
+}
+
+#coinChoice {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+#play,
+#resetButton, #attackButton, #defendButton {
+    padding: 15px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#attackButton, #defendButton {
+    margin-top: 10px;
+    display: inline-block;
+}
+#attackButton {
+    width: calc(27.5% - 3px);
+}
+#defendButton {
+    width: calc(27.5% - 3px);
+}
+#play {
+    background-color: #4CAF50;  
+    color: white;
+}
+
+#play:hover {
+    background-color: #45a049;
+}
+
+#play:disabled {
+    background-color:white;
+    color:gray;
+}
+
+#resetButton {
+    margin-top: 10px;
+    display: inline-block;
+    width: calc(100% - 10px);
+    background-color: #3498db;
+    color: white;
+}
+
+#resetButton:hover {
+    background-color: #2980b9;
+}
+
+#resetButton:disabled {
+    background-color:white;
+    color:gray;
+}
+
+#victoryMessage
+{
+    font-size: 50px;
+    color: orange;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-weight: 300;
+
+}
+
